@@ -98,7 +98,7 @@
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <img src="assets/framework-ccd.png" width="100%" />
+        <img src="assets/ccd-1.png" width="100%" />
       </div>
     </div>
   </div>
@@ -113,13 +113,10 @@
       <p>
 Diffusion Language Models (DLMs) show strong capabilities in any-order generation, but current
 decoding strategies rely heavily on single-step confidence or entropy. This often results in
-locally optimal yet globally inconsistent sampling trajectories.
-<br><br>
-We introduce <b>Coherent Contextual Decoding (CCD)</b>, a framework that leverages predictive
+locally optimal yet globally inconsistent sampling trajectories. We introduce <b>Coherent Contextual Decoding (CCD)</b>, a framework that leverages predictive
 consistency across diffusion steps by approximating a target distribution through context
 marginalization. We further propose <b>CCD‑DS</b>, an adaptive decoding strategy that dynamically
 adjusts the unmasking budget based on token-level context sensitivity.
-<br><br>
 Across Dream and LLaDA models, CCD achieves up to <b>3.48×</b> speedup and <b>3.91%</b> accuracy
 improvement, simultaneously enhancing efficiency and generation quality.
       </p>
@@ -127,6 +124,15 @@ improvement, simultaneously enhancing efficiency and generation quality.
   </div>
 </section>
 
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <img src="assets/ccd-3.png" width="100%" />
+      </div>
+    </div>
+  </div>
+</section>
 <!-- MOTIVATION -->
 <section class="section">
   <div class="container is-max-desktop">
@@ -137,9 +143,9 @@ improvement, simultaneously enhancing efficiency and generation quality.
 Current DLM decoding methods select tokens based on single-step confidence, but this approach suffers from:
       </p>
       <ul>
-        <li>Local optimality</li>
-        <li>No theoretical interpretation</li>
-        <li>Inefficient uniform decoding budgets</li>
+        <li> 🚫 <b>Local optimality:</b> Large models are typcally over-confident</li>
+        <li>🚫  <b>No theoretical interpretation:</b> How to conduct a decoding under a theoretically controllable process?</li>
+        <li>🚫 <b>Inefficient uniform decoding budgets:</b> Simple predictions can ehance budget? </li>
       </ul>
       <p>
 CCD uses historical context predictions to build a more stable and globally coherent decoding trajectory.
@@ -148,24 +154,45 @@ CCD uses historical context predictions to build a more stable and globally cohe
   </div>
 </section>
 
+  
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <img src="assets/ccd-4.png" width="100%" />
+      </div>
+    </div>
+  </div>
+</section>
 <!-- METHOD -->
 <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Method</h2>
 
     <div class="content has-text-justified">
-      <h3 class="title is-4">1. Context-Marginalized Target Approximation</h3>
+      <h3 class="title is-4">🔥 <b>Context-Marginalized Target Approximation</b></h3>
       <p>CCD forms a more stable predictive distribution by averaging predictions across multiple diffusion steps.</p>
 
-      <h3 class="title is-4">2. Connection to Conditional Mutual Information</h3>
+      <h3 class="title is-4">🔥 <b>Connection to Conditional Mutual Information</b></h3>
       <p>We show CCD optimizes an entropy expression involving <code>I(x; c | s)</code>, grounding the framework theoretically.</p>
 
-      <h3 class="title is-4">3. CCD‑DS: Adaptive Decoding Budget</h3>
+      <h3 class="title is-4">🔥 <b>CCD‑DS: Adaptive Decoding Budget</b></h3>
       <p>Budget increases for easy contexts and decreases for difficult contexts.</p>
     </div>
   </div>
 </section>
 
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <img src="assets/ccd-2.png" width="100%" />
+      </div>
+    </div>
+  </div>
+</section>
 <!-- EXPERIMENTS -->
 <section class="section">
   <div class="container is-max-desktop">
@@ -173,9 +200,9 @@ CCD uses historical context predictions to build a more stable and globally cohe
 
     <div class="content has-text-justified">
       <ul>
-        <li>Up to <b>3.48× speedup</b></li>
-        <li>Up to <b>+3.91% accuracy improvement</b></li>
-        <li>Better performance on GSM8K, HumanEval, Trip, etc.</li>
+        <li>🚀  Up to <b>3.48× speedup</b></li>
+        <li>🚀  Up to <b>+3.91% accuracy improvement</b></li>
+        <li>🚀  Better performance on GSM8K, HumanEval, Trip, etc.</li>
       </ul>
     </div>
   </div>
