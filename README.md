@@ -1,14 +1,14 @@
-# TTA-DAL-CRF
+# CCD-DLM
 
-This repository contains the source code for the project page of [TTA-DAL-CRF](https://tonyckc.github.io/Test-time-Adaptation-for-Foundation-Medical-Segmentation-Model-Without-Parametric-Updates/).
+This repository contains the source code for the project page of [CCD-DLM](https://tonyckc.github.io/CCD-DLM-Project/).
 
-If you find TTA-DAL-CRF useful for your work please cite:
+If you find CCD-DLM useful for your work please cite:
 ```
-@article{kecheng2025ICCV,
-  title={Test-time Adaptation for Foundation Medical Segmentation Model without Parametric Updates},
-  author={Kecheng Chen, Xinyu Luo, Tiexin Qin, Jie Liu, Hui Liu, Victor Ho Fun Lee, Hong Yan, and Haoliang Li},
-  conference={International Conference on Computer Vision 2025},
-  year={2025},
+@article{chen2025ccd,
+  title={Beyond Confidence: Adaptive and Coherent Decoding for Diffusion Language Models},
+  author={Chen, Kecheng, Liu, Ziru  Tao, Xijia  Liu, Hui Fu, Xinyu Zhang, Suiyun Tu, Dandan Kong, Lingpeng Liu, Rui Li, Haoliang},
+  journal={arXiv preprint arXiv:2512.02044},
+  year={2025}
 }
 ```
 
