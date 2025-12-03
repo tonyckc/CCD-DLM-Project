@@ -1,671 +1,198 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
-
   <meta charset="utf-8">
-
   <meta name="description" content="Coherent Contextual Decoding (CCD)">
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>CCD: Coherent Contextual Decoding for Diffusion Language Models</title>
 
-
-
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-
         rel="stylesheet">
 
-
-
   <link rel="stylesheet" href="./static/css/bulma.min.css">
-
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-
   <link rel="stylesheet" href="./static/css/index.css">
-
-
-
-  <script>
-
-    // Language Switcher
-
-    function switchLang(lang) {
-
-      const en = document.querySelectorAll('.lang-en');
-
-      const zh = document.querySelectorAll('.lang-zh');
-
-      en.forEach(el => el.style.display = lang === 'en' ? 'block' : 'none');
-
-      zh.forEach(el => el.style.display = lang === 'zh' ? 'block' : 'none');
-
-
-
-      // UI active state
-
-      document.getElementById('btn-en').classList.toggle('is-dark', lang === 'en');
-
-      document.getElementById('btn-zh').classList.toggle('is-dark', lang === 'zh');
-
-    }
-
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-
-      switchLang('en'); // default English
-
-    });
-
-  </script>
-
 </head>
-
-
 
 <body>
 
-
-
 <!-- Navigation -->
-
 <nav class="navbar" role="navigation">
-
   <div class="navbar-menu">
-
     <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-
       <a class="navbar-item" href="#">
-
         <span class="icon"> <i class="fas fa-home"></i> </span>
-
       </a>
-
     </div>
-
-
-
-    <!-- Language Switch Buttons -->
-
-    <div class="navbar-end">
-
-      <div class="navbar-item">
-
-        <div class="buttons">
-
-          <button id="btn-en" class="button is-small" onclick="switchLang('en')">EN</button>
-
-          <button id="btn-zh" class="button is-small" onclick="switchLang('zh')">中文</button>
-
-        </div>
-
-      </div>
-
-    </div>
-
   </div>
-
 </nav>
 
-
-
-
-
 <!-- TITLE + AUTHORS + AFFILIATIONS + PUBLICATION -->
-
 <section class="hero">
-
   <div class="hero-body">
-
     <div class="container is-max-desktop">
-
       <div class="column has-text-centered">
 
+        <h1 class="title is-1 publication-title">
+          Coherent Contextual Decoding (CCD)<br>
+          <small><span style="font-size: 60%;">arXiv 2025</span></small>
+        </h1>
 
-
-        <!-- English Title -->
-
-        <div class="lang-en">
-
-          <h1 class="title is-1">Coherent Contextual Decoding (CCD)</h1>
-
-          <h2 class="subtitle is-4">Adaptive and Consistent Inference for Diffusion Language Models</h2>
-
-          <h3 class="subtitle is-5">arXiv Preprint — 2025</h3>
-
+        <div class="is-size-5 publication-authors" style="font-weight: bold;">
+          <span class="author-block"><a href="https://tonyckc.github.io/">Kecheng Chen</a><sup>1⋆</sup>,</span>
+          <span class="author-block"><a href="#">Ziru Liu</a><sup>2⋆♠</sup>,</span>
+          <span class="author-block"><a href="#">Xijia Tao</a><sup>3</sup>,</span>
+          <span class="author-block"><a href="https://scholars.cityu.edu.hk/en/persons/liuhui3/">Hui Liu</a><sup>1</sup>,</span>
+          <span class="author-block"><a href="#">Xinyu Fu</a><sup>2</sup>,</span>
+          <span class="author-block"><a href="#">Suiyun Zhang</a><sup>2</sup>,</span>
+          <span class="author-block"><a href="#">Dandan Tu</a><sup>2</sup>,</span>
+          <span class="author-block"><a href="https://www.cs.hku.hk/people/academic-staff/lpk">Lingpeng Kong</a><sup>3</sup>,</span>
+          <span class="author-block"><a href="mailto:liu.rui2@huawei.com">Rui Liu</a><sup>2♣</sup>,</span>
+          <span class="author-block"><a href="https://hlli1991.github.io/">Haoliang Li</a><sup>1♣</sup></span>
         </div>
 
-
-
-        <!-- Chinese Title -->
-
-        <div class="lang-zh">
-
-          <h1 class="title is-1">一致性上下文解码（CCD）</h1>
-
-          <h2 class="subtitle is-4">一种用于扩散语言模型的自适应、一致性推理框架</h2>
-
-          <h3 class="subtitle is-5">arXiv 预印本 — 2025</h3>
-
+        <div class="is-size-5 publication-authors" style="margin-top:10px; font-weight: bold;">
+          <span class="author-block"><sup>1</sup> City University of Hong Kong</span><br>
+          <span class="author-block"><sup>2</sup> Huawei Research</span><br>
+          <span class="author-block"><sup>3</sup> The University of Hong Kong</span><br>
+          <span class="author-block">Email: liu.rui2@huawei.com; haoliang.li@cityu.edu.hk</span>
         </div>
 
-
-
-
-
-        <!-- AUTHORS -->
-
-        <div class="is-size-5 publication-authors" style="margin-top:20px;">
-
-          <span class="author-block">Kecheng Chen<sup>1</sup>,</span>
-
-          <span class="author-block">Ziru Liu<sup>2</sup>,</span>
-
-          <span class="author-block">Xijia Tao<sup>3</sup>,</span>
-
-          <span class="author-block">Hui Liu<sup>1</sup>,</span>
-
-          <span class="author-block">Xinyu Fu<sup>2</sup>,</span>
-
-          <span class="author-block">Suiyun Zhang<sup>2</sup>,</span>
-
-          <span class="author-block">Dandan Tu<sup>2</sup>,</span>
-
-          <span class="author-block">Lingpeng Kong<sup>3</sup>,</span>
-
-          <span class="author-block">Rui Liu<sup>2</sup>,</span>
-
-          <span class="author-block">Haoliang Li<sup>1</sup></span>
-
-        </div>
-
-
-
-        <!-- AFFILIATIONS -->
-
-        <div class="is-size-5 publication-authors" style="margin-top:10px;">
-
-          
-
-          <!-- English -->
-
-          <div class="lang-en">
-
-            <span class="author-block"><sup>1</sup> City University of Hong Kong</span><br>
-
-            <span class="author-block"><sup>2</sup> Huawei Research</span><br>
-
-            <span class="author-block"><sup>3</sup> The University of Hong Kong</span>
-
-          </div>
-
-
-
-          <!-- Chinese -->
-
-          <div class="lang-zh">
-
-            <span class="author-block"><sup>1</sup> 香港城市大学</span><br>
-
-            <span class="author-block"><sup>2</sup> 华为研究院</span><br>
-
-            <span class="author-block"><sup>3</sup> 香港大学</span>
-
-          </div>
-
-        </div>
-
-
-
-        <!-- PAPER & CODE BUTTONS -->
-
-        <div class="column has-text-centered">
-
-          <div class="publication-links" style="margin-top:20px;">
-
-            
-
+        <div class="column has-text-centered" style="margin-top:20px;">
+          <div class="publication-links">
             <span class="link-block">
-
               <a href="#" class="external-link button is-normal is-rounded is-dark">
-
                 <span class="icon"><i class="fas fa-file-pdf"></i></span>
-
-                <span class="lang-en">Paper</span>
-
-                <span class="lang-zh">论文</span>
-
+                <span>Paper</span>
               </a>
-
             </span>
-
-
 
             <span class="link-block">
-
               <a href="#" class="external-link button is-normal is-rounded is-dark">
-
                 <span class="icon"><i class="fab fa-github"></i></span>
-
-                <span class="lang-en">Code</span>
-
-                <span class="lang-zh">代码</span>
-
+                <span>Code</span>
               </a>
-
             </span>
-
-
-
           </div>
-
         </div>
-
-
-
-
 
       </div>
-
     </div>
-
   </div>
-
 </section>
-
-
-
-
 
 <!-- MAIN FIGURE -->
-
 <section class="section">
-
   <div class="container is-max-desktop">
-
     <div class="columns is-centered has-text-centered">
-
       <div class="column is-four-fifths">
-
         <img src="assets/framework-ccd.png" width="100%" />
-
       </div>
-
     </div>
-
   </div>
-
 </section>
-
-
-
-
-
-
-
-
 
 <!-- ABSTRACT -->
-
 <section class="section">
-
   <div class="container is-max-desktop">
-
-
-
-    <h2 class="title is-3 has-text-centered lang-en">Abstract</h2>
-
-    <h2 class="title is-3 has-text-centered lang-zh">摘要</h2>
-
-
+    <h2 class="title is-3 has-text-centered">Abstract</h2>
 
     <div class="content has-text-justified">
-
-
-
-      <!-- English Abstract -->
-
-      <div class="lang-en">
-
-        <p>
-
+      <p>
 Diffusion Language Models (DLMs) show strong capabilities in any-order generation, but current
-
 decoding strategies rely heavily on single-step confidence or entropy. This often results in
-
 locally optimal yet globally inconsistent sampling trajectories.
-
 <br><br>
-
 We introduce <b>Coherent Contextual Decoding (CCD)</b>, a framework that leverages predictive
-
 consistency across diffusion steps by approximating a target distribution through context
-
 marginalization. We further propose <b>CCD‑DS</b>, an adaptive decoding strategy that dynamically
-
 adjusts the unmasking budget based on token-level context sensitivity.
-
 <br><br>
-
 Across Dream and LLaDA models, CCD achieves up to <b>3.48×</b> speedup and <b>3.91%</b> accuracy
-
 improvement, simultaneously enhancing efficiency and generation quality.
-
-        </p>
-
-      </div>
-
-
-
-      <!-- Chinese Abstract -->
-
-      <div class="lang-zh">
-
-        <p>
-
-扩散语言模型（DLMs）在任意顺序生成方面表现强大，但现有推理方法高度依赖单步置信度或熵，
-
-这常导致局部最优但全局不一致的解码路径。
-
-<br><br>
-
-我们提出 <b>一致性上下文解码（CCD）</b>，通过整合多步预测的上下文一致性来构建更稳健的
-
-近似目标分布。同时提出 <b>CCD‑DS</b> 自适应推理策略，可根据 token 的语义复杂度动态调整解码预算。
-
-<br><br>
-
-在 Dream 和 LLaDA 模型上，CCD 实现最高 <b>3.48×</b> 加速和 <b>3.91%</b> 性能提升，有效兼顾效率与质量。
-
-        </p>
-
-      </div>
-
-
-
+      </p>
     </div>
-
   </div>
-
 </section>
-
-
-
-
-
-
 
 <!-- MOTIVATION -->
-
 <section class="section">
-
   <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Motivation</h2>
 
-
-
-    <h2 class="title is-3 has-text-centered lang-en">Motivation</h2>
-
-    <h2 class="title is-3 has-text-centered lang-zh">研究动机</h2>
-
-
-
-    <div class="content has-text-justified lang-en">
-
+    <div class="content has-text-justified">
       <p>
-
 Current DLM decoding methods select tokens based on single-step confidence, but this approach suffers from:
-
       </p>
-
       <ul>
-
         <li>Local optimality</li>
-
         <li>No theoretical interpretation</li>
-
         <li>Inefficient uniform decoding budgets</li>
-
       </ul>
-
       <p>
-
 CCD uses historical context predictions to build a more stable and globally coherent decoding trajectory.
-
       </p>
-
     </div>
-
-
-
-    <div class="content has-text-justified lang-zh">
-
-      <p>
-
-当前 DLM 推理通常基于单步置信度，但这种方式存在：
-
-      </p>
-
-      <ul>
-
-        <li>局部最优</li>
-
-        <li>缺乏理论支撑</li>
-
-        <li>固定预算导致低效率</li>
-
-      </ul>
-
-      <p>
-
-CCD 借助历史上下文的稳定性来获得更一致、更可靠的解码路径。
-
-      </p>
-
-    </div>
-
-
-
   </div>
-
 </section>
-
-
-
-
-
-
 
 <!-- METHOD -->
-
 <section class="section">
-
   <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Method</h2>
 
-
-
-    <h2 class="title is-3 has-text-centered lang-en">Method</h2>
-
-    <h2 class="title is-3 has-text-centered lang-zh">方法简介</h2>
-
-
-
-    <!-- English -->
-
-    <div class="content has-text-justified lang-en">
-
+    <div class="content has-text-justified">
       <h3 class="title is-4">1. Context-Marginalized Target Approximation</h3>
-
       <p>CCD forms a more stable predictive distribution by averaging predictions across multiple diffusion steps.</p>
 
-
-
       <h3 class="title is-4">2. Connection to Conditional Mutual Information</h3>
-
       <p>We show CCD optimizes an entropy expression involving <code>I(x; c | s)</code>, grounding the framework theoretically.</p>
 
-
-
       <h3 class="title is-4">3. CCD‑DS: Adaptive Decoding Budget</h3>
-
       <p>Budget increases for easy contexts and decreases for difficult contexts.</p>
-
     </div>
-
-
-
-    <!-- Chinese -->
-
-    <div class="content has-text-justified lang-zh">
-
-      <h3 class="title is-4">1. 上下文边缘化近似目标分布</h3>
-
-      <p>通过整合多个扩散步骤的预测，CCD 构建更稳健的概率分布。</p>
-
-
-
-      <h3 class="title is-4">2. 与条件互信息的理论联系</h3>
-
-      <p>CCD 的目标分布可分解为包含 <code>I(x; c | s)</code> 的熵形式，具有明确的理论基础。</p>
-
-
-
-      <h3 class="title is-4">3. CCD‑DS：自适应解码预算</h3>
-
-      <p>简单上下文→更大预算；复杂上下文→更小预算。</p>
-
-    </div>
-
-
-
   </div>
-
 </section>
-
-
-
-
-
-
 
 <!-- EXPERIMENTS -->
-
 <section class="section">
-
   <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Experiments</h2>
 
-
-
-    <h2 class="title is-3 has-text-centered lang-en">Experiments</h2>
-
-    <h2 class="title is-3 has-text-centered lang-zh">实验结果</h2>
-
-
-
-    <div class="content has-text-justified lang-en">
-
+    <div class="content has-text-justified">
       <ul>
-
         <li>Up to <b>3.48× speedup</b></li>
-
         <li>Up to <b>+3.91% accuracy improvement</b></li>
-
         <li>Better performance on GSM8K, HumanEval, Trip, etc.</li>
-
       </ul>
-
     </div>
-
-
-
-    <div class="content has-text-justified lang-zh">
-
-      <ul>
-
-        <li>最高 <b>3.48× 推理加速</b></li>
-
-        <li>最高 <b>+3.91% 性能提升</b></li>
-
-        <li>在 GSM8K、HumanEval、Trip 等任务表现更佳</li>
-
-      </ul>
-
-    </div>
-
-
-
   </div>
-
 </section>
-
-
-
-
-
-
-
-
 
 <!-- BIBTEX -->
-
 <section class="section">
-
   <div class="container is-max-desktop content">
-
-
-
-    <h2 class="title lang-en">BibTeX</h2>
-
-    <h2 class="title lang-zh">引用格式</h2>
-
-
+    <h2 class="title">BibTeX</h2>
 
 <pre><code>@article{chen2025ccd,
-
   title={Beyond Confidence: Adaptive and Coherent Decoding for Diffusion Language Models},
-
   author={Chen, Kecheng and Liu, Ziru and Tao, Xijia and Liu, Hui and Fu, Xinyu and Zhang, Suiyun and Tu, Dandan and Kong, Lingpeng and Liu, Rui and Li, Haoliang},
-
   journal={arXiv preprint arXiv:2025.xxxxx},
-
   year={2025}
-
 }</code></pre>
 
-
-
   </div>
-
 </section>
 
-
-
-
-
-
-
-
-
 <!-- FOOTER -->
-
 <footer class="footer">
-
   <div class="container">
-
     <div class="content has-text-centered">
-
       <p>Website template licensed under CC BY-SA 4.0.</p>
-
     </div>
-
   </div>
-
 </footer>
 
-
-
 </body>
-
 </html>
